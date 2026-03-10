@@ -34,12 +34,12 @@ class MotorY : public Nema17{
     MotorY(int step_pin=0, int dir_pin=0, int en_pin=0) : Nema17(step_pin, dir_pin, en_pin){
 
     };
-    void GoOnStep(int StepCount, bool dir,int pulseInterval=1000){
+    void GoOnStep(int StepCount, bool dir,int pulseInterval=1000,bool enable=true){
         NemaOn();
         for(int i=0; i<StepCount; i++){
             OneStep(dir, pulseInterval);
         }
-        NemaOff();
+        if(enable) NemaOff();
     }
 };
 

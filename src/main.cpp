@@ -24,7 +24,7 @@
 #define LineSensorPin A13
 #define LimitSwitch 2
 
-#define downButton A11//когда 0, нажата
+#define downButton A11
 #define UpButton A12
 
 #define Button1 A10
@@ -62,10 +62,24 @@ void setup() {
 
   worker.Pen.attach(ServoPin);
   // worker.G28();
+  // worker.GoTo(10,10);           
+  // worker.Dot();
+  // worker.GoTo(20,-10);
+  // worker.Dot();
+  // worker.GoTo(30,20);
+  // worker.Dot();
+  // worker.GoTo(40,0);
+  // worker.Dot();
   // delay(2000);
+  worker.GoTo(0,45);
+  worker.G1(0,85);
+  worker.G1(20,85);
+  worker.G1(40,70);
+  worker.G1(20,55);
+  worker.G1(0,55);
+  
   // worker.a();
-  // worker.M0();
-  // worker.a();
+  // worker.M1();
   
 }
 

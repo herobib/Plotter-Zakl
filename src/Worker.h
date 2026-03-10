@@ -10,8 +10,8 @@ class Worker {
     MotorY My;
     int Xcoord;
     int Ycoord;
-    int PenOutputX=18;  
-    int PenOutputY=23; 
+    int PenOutputX=16;  
+    int PenOutputY=21; 
 
     public:
     Servo Pen;
@@ -41,6 +41,8 @@ class Worker {
     int MMtoStepsX(float mm){
         return int(8.5028*mm + 3.3797);
     }
+
+
 
     void G28(){
         M1();
@@ -79,9 +81,7 @@ class Worker {
         }
         Xcoord=0;
         Serial.println("Я дома!");
-        M0();
-        delay(100);
-        M1();
+        delay(1500);
     }
 
     void M1(){
@@ -94,34 +94,84 @@ class Worker {
     }
     void Dot(){
         M0();
+        delay(300);
         M1();
+        delay(200);
     }
     void Down(){
-        Mx.GoOnStep(75, false,1000);
+        Mx.GoOnStep(MMtoStepsX(10), false,1000);
+        Xcoord-=10;
     }
     void Up(){
-        Mx.GoOnStep(75, true, 2200);
+        Mx.GoOnStep(MMtoStepsX(10), true, 2200);
+        Xcoord+=10;
+    }
+    void GoTo(int x, int y){
+        float Ydv=abs(y-Ycoord);
+        float Xdv=abs(x-Xcoord);
+        bool xdir=x>Xcoord;
+        bool ydir=y<Ycoord;
+        M1();
+        delay(300);
+        My.GoOnStep(MMtoStepsY(Ydv), ydir,1500);
+        Ycoord=y;
+        delay(200);
+        Mx.GoOnStep(MMtoStepsX(Xdv), xdir,2000);
+        Xcoord=x;
+        delay(200);
+    }
+    void G1(int x,int y){
+        M0();
+        delay(300);
+        float Ydv=abs(y-Ycoord);
+        float Xdv=abs(x-Xcoord);
+        bool xdir=x>Xcoord;
+        bool ydir=y<Ycoord;
+        if(Ydv!=0 && Xdv!=0){
+            int last=0;
+            if(MMtoStepsY(Ydv)<MMtoStepsX(Xdv)){
+                float tg=float(MMtoStepsY(Ydv))/float(MMtoStepsX(Xdv));
+                for(int i=0; i<MMtoStepsX(Xdv); i++){
+                    Mx.GoOnStep(1, xdir,2000);
+                    if(int(tg*i)==last+1){
+                        last=int(tg*i);
+                        My.GoOnStep(1, ydir,1700,false);
+                    }
+                }
+            }
+            else{
+                float tg=float(MMtoStepsX(Xdv))/float(MMtoStepsY(Ydv));
+                for(int i=0; i<MMtoStepsY(Ydv); i++){
+                    My.GoOnStep(1, ydir,1700,false);
+                    if(int(tg*i)==last+1){
+                        last=int(tg*i);
+                        Mx.GoOnStep(1, xdir,2000);
+                    }
+                }
+            }
+
+            My.NemaOff();
+        }
+        else{
+            if(Ydv==0){
+                My.NemaOn();
+                Mx.GoOnStep(MMtoStepsX(Xdv), xdir,2000);
+                My.NemaOff();
+            }
+            else{
+                My.GoOnStep(MMtoStepsY(Ydv), ydir,1700);
+            }
+        }
+        Xcoord=x;
+        Ycoord=y;
+        delay(200);
+        M1();
     }
 
-    void a(){
-        // Mx.GoOnStep(MMtoStepsX(30), true,2000);
-        // delay(200);
-        // M0();
-        delay(500);
-        // Mx.GoOnStep(MMtoStepsX(32), true,2000);
-        // delay(300);
-        int b=MMtoStepsY(70);
-        My.GoOnStep(b, true,1100);
-        delay(1000);
-        // Mx.GoOnStep(MMtoStepsX(32), false,1300);
-        // delay(400);
-        My.GoOnStep(b, false,1100);
-        delay(400);
-        // M1();
-        // delay(300);
-        // Mx.GoOnStep(MMtoStepsX(30), false,1300);
-        // delay(300);        
-        
+    void a(){ 
+        M0();
+        delay(300); 
+        My.GoOnStep(MMtoStepsY(30), false,2000);
+        M1();
     }
-
 };
