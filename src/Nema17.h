@@ -61,7 +61,5 @@ class MotorX{
             m1.OneStep(dir, pulseInterval);
             m2.OneStep(!dir, pulseInterval);
         }
-        // m1.NemaOff();
-        // m2.NemaOff();
     }
 };
