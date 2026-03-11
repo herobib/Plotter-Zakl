@@ -61,41 +61,48 @@ void setup() {
   pinMode(Button10, INPUT_PULLUP);
 
   worker.Pen.attach(ServoPin);
-  // worker.G28();
-  // worker.GoTo(10,10);           
-  // worker.Dot();
-  // worker.GoTo(20,-10);
-  // worker.Dot();
-  // worker.GoTo(30,20);
-  // worker.Dot();
-  // worker.GoTo(40,0);
-  // worker.Dot();
-  // delay(2000);
-  worker.GoTo(0,45);
-  worker.G1(0,85);
-  worker.G1(20,85);
-  worker.G1(40,70);
-  worker.G1(20,55);
-  worker.G1(0,55);
-  
-  // worker.a();
-  // worker.M1();
+  worker.M1();
+  // worker.CalibrationTestY();
   
 }
 
 void loop() {
-  // worker.Work("G1 X100 Y100");
+  // worker.M1();
+  // delay(1000);
+  // worker.M0();
+  // delay(1000);
   if(digitalRead(downButton) == 0){
     worker.Down(); 
   }
   else if(digitalRead(UpButton) == 0){
-    worker.Up();
+    worker.Up();  
   }
   else if(digitalRead(Button1) == 0){
     Serial.println("Button 1");
+    worker.G28();
+    worker.GoTo(70,20);
+    worker.G1(70,80);
+    worker.G1(120,80);
+    worker.G1(150,50);
+    worker.G1(120,20);
+    worker.G1(70,20);
+    worker.GoTo(85,35);
+    worker.G1(85,65);
+    worker.G1(105,65);
+    worker.G1(105,35);
+    worker.G1(85,35);
+    worker.G1(105,65);
+    worker.GoTo(105,35);
+    worker.G1(85,65);
+    worker.BackToStart();
   }
   else if(digitalRead(Button2) == 0){
     Serial.println("Button 2");
+    worker.G28();
+    worker.GoTo(10,80);
+    worker.G1(10,-70);
+    worker.G1(160,-70);
+    worker.BackToStart();
   }
   else if(digitalRead(Button3) == 0){
     Serial.println("Button 3");

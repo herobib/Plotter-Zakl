@@ -10,8 +10,10 @@ class Worker {
     MotorY My;
     int Xcoord;
     int Ycoord;
-    int PenOutputX=16;  
-    int PenOutputY=21; 
+    int PenOutputX=15;  
+    int PenOutputY=25; 
+
+    int FormStartX=0;
 
     public:
     Servo Pen;
@@ -29,20 +31,13 @@ class Worker {
         Serial.begin(115200);
     }
 
-    void Work(String gcode){
-        for(int i=0;i<100;i++){
-                Mx.GoOnStep(10000, true);
-        }
-    }
-
     int MMtoStepsY(float mm){
-        return abs(int(5.04*mm - 6.1916));
+        return abs(int(5*mm) - 3.1076);
+        //return abs(int(5.04*mm - 6.1916));
     }
     int MMtoStepsX(float mm){
-        return int(8.5028*mm + 3.3797);
+        return int(8.445*mm + 3.3797);
     }
-
-
 
     void G28(){
         M1();
@@ -53,13 +48,14 @@ class Worker {
         delay(1000);
 
         My.GoOnStep(MMtoStepsY(25),false);//просто подвинулись
-        Mx.GoOnStep(MMtoStepsX(70), true,1600);//уезжаем за линию X
-
+        Mx.GoOnStep(MMtoStepsX(70), true,2000);//уезжаем за линию X
+        FormStartX=70;
         Serial.println("Ищю линию X");        
         delay(1000);
         int Xlim=MMtoStepsX(100);
         while(digitalRead(LineSensorPin)==0 and Xlim>0){      
             Mx.GoOnStep(1, false,1600);
+            FormStartX--;
             Xlim--;
         }
         Serial.println("Нашёл");
@@ -82,6 +78,7 @@ class Worker {
         Xcoord=0;
         Serial.println("Я дома!");
         delay(1500);
+        Dot();
     }
 
     void M1(){
@@ -167,11 +164,58 @@ class Worker {
         delay(200);
         M1();
     }
-
-    void a(){ 
-        M0();
-        delay(300); 
-        My.GoOnStep(MMtoStepsY(30), false,2000);
-        M1();
+    void BackToStart(){
+        Mx.GoOnStep(MMtoStepsX(Xcoord+PenOutputX+20), false, 1300);
     }
+
+
+    void CalibrationTestY(){
+        delay(1000);
+        M1();
+        delay(300);
+        while(digitalRead(LimitSwitchPin)){
+            My.GoOnStep(1, true);
+        }
+        M0();
+        Serial.println("Приехал к концевику");
+        delay(1000);
+        My.GoOnStep(125,false);
+        for(int i=880;i>520;i-=60){
+            M0();
+            delay(300);
+            My.GoOnStep(i, false,1200);
+            delay(500);
+            M1();
+            delay(300);
+            Mx.GoOnStep(MMtoStepsX(5), true,2000);
+            delay(300);
+            My.GoOnStep(i, true,1200);
+            delay(300);
+        }
+        for(int i=520;i>120;i-=40){
+            M0();
+            delay(300);
+            My.GoOnStep(i, false,1200);
+            delay(500);    
+            M1();        
+            Mx.GoOnStep(MMtoStepsX(5), true,2000);
+            delay(500);
+            My.GoOnStep(i, true,1200);
+            delay(300);
+        }
+        for(int i=120;i>=20;i-=20){
+            M0();
+            delay(300);
+            My.GoOnStep(i, false,1200);
+            delay(500);
+            M1();
+            delay(300);
+            Mx.GoOnStep(MMtoStepsX(5), true,2000);
+            delay(300);
+            My.GoOnStep(i, true,1200);
+            delay(300);
+        }
+        //880 820 760 700 640 580 520 480 440 400 360 320 280 240 200 160 120 100 80 60 40 20
+    }
+    
 };
