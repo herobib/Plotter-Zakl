@@ -78,6 +78,7 @@ void loop() {
     worker.Up();  
   }
   else if(digitalRead(Button1) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 1");
     worker.G28();
     worker.GoTo(70,20);
@@ -95,39 +96,63 @@ void loop() {
     worker.GoTo(105,35);
     worker.G1(85,65);
     worker.BackToStart();
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button2) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 2");
     worker.G28();
     worker.GoTo(10,80);
     worker.G1(10,-70);
     worker.G1(160,-70);
     worker.BackToStart();
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button3) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 3");
+    worker.G28();
+    worker.GoTo(40,-60);
+    worker.G2(40,-30,40,0);
+    worker.G3(40,30,40,60);
+    worker.BackToStart();
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button4) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 4");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button5) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 5");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button6) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 6");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button7) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 7");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button8) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 8");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button9) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 9");
+    digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button10) == 0){
+    digitalWrite(WorkingPin, HIGH);
     Serial.println("Button 10");
+    digitalWrite(WorkingPin, LOW);
   }
-  digitalWrite(WorkingPin, HIGH);
+  
   // Serial.println(analogRead(LineSensorPin));
   }
