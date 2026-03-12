@@ -169,26 +169,27 @@ class Worker {
         float r = sqrt((Xcoord - Xcenter)*(Xcoord - Xcenter) + (Ycoord - Ycenter) *(Ycoord - Ycenter));
         if(Ycoord<Ynado){
             for(int i = Ycoord;i<Ynado;i+=4){
-                G1(sqrt(r*r - (i - Ycenter)*(i - Ycenter)) + Xcenter,i);
+                G1((sqrt(r*r - (i - Ycenter)*(i - Ycenter)))*0.94 + Xcenter,i);
             }
         }
         else{
-            for(int i = Ynado;i<Ycoord ;i+=4){
-                G1(-sqrt(r*r - (i - Ycenter)*(i - Ycenter)) + Xcenter,i);
+            for(int i = Ycoord;i>Ynado ;i-=4){
+                G1((-sqrt(r*r - (i - Ycenter)*(i - Ycenter)))*0.94 + Xcenter,i);
             }
         }
         G1(Xnado,Ynado);
     }
+
     void G3(int Xcenter,int Ycenter,int Xnado,int Ynado){
         float r = sqrt((Xcoord - Xcenter)*(Xcoord - Xcenter) + (Ycoord - Ycenter) *(Ycoord - Ycenter));
         if(Ycoord<Ynado){
             for(int i = Ycoord;i<Ynado;i+=4){
-                G1(-sqrt(r*r - (i - Ycenter)*(i - Ycenter)) + Xcenter,i);
+                G1(-sqrt(r*r - (i - Ycenter)*(i - Ycenter))*0.94 + Xcenter,i);
             }
         }
         else{
-            for(int i = Ynado;i<Ycoord ;i+=4){
-                G1(sqrt(r*r - (i - Ycenter)*(i - Ycenter)) + Xcenter,i);
+            for(int i = Ycoord;i>Ynado ;i-=4){
+                G1(sqrt(r*r - (i - Ycenter)*(i - Ycenter))*0.94 + Xcenter,i);
             }
         }
         G1(Xnado,Ynado);

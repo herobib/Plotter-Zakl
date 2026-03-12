@@ -114,22 +114,29 @@ void loop() {
     worker.G28();
     worker.GoTo(40,-60);
     worker.G2(40,-30,40,0);
-    worker.G3(40,30,40,60);
+    worker.G2(40,-30,40,-60);
     worker.BackToStart();
     digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button4) == 0){
     digitalWrite(WorkingPin, HIGH);
+    worker.M0();
     Serial.println("Button 4");
     digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button5) == 0){
     digitalWrite(WorkingPin, HIGH);
+    worker.M1();
     Serial.println("Button 5");
     digitalWrite(WorkingPin, LOW);
   }
   else if(digitalRead(Button6) == 0){
     digitalWrite(WorkingPin, HIGH);
+    worker.G28();
+    worker.GoTo(40,-60);
+    worker.G3(40,-30,40,0);
+    worker.G3(40,-30,40,-60);
+    worker.BackToStart();
     Serial.println("Button 6");
     digitalWrite(WorkingPin, LOW);
   }
