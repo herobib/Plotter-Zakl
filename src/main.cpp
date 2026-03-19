@@ -67,10 +67,6 @@ void setup() {
 }
 
 void loop() {
-  // worker.M1();
-  // delay(1000);
-  // worker.M0();
-  // delay(1000);
   if(digitalRead(downButton) == 0){
     worker.Down(); 
   }
